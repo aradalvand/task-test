@@ -6,13 +6,10 @@ Console.WriteLine("Here now");
 
 Stopwatch sw = new();
 sw.Start();
-await Parallel.ForEachAsync(r, parallelOptions: new()
-{
-    MaxDegreeOfParallelism = int.MaxValue
-}, async (req, ct) =>
-{
-    await Handle(req);
-});
+List<Task> tasks = [];
+await foreach (var req in r)
+    tasks.Add(Handle(req));
+await Task.WhenAll(tasks);
 sw.Stop();
 Console.WriteLine($"Finished in {sw.Elapsed.TotalMilliseconds:N0} ms");
 
