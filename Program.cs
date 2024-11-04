@@ -1,7 +1,10 @@
-﻿await foreach (var req in Subscribe())
+﻿Console.WriteLine("Here");
+var r = Subscribe();
+Console.WriteLine("Here now");
+await Parallel.ForEachAsync(r, async (req, ct) =>
 {
     await Handle(req);
-}
+});
 
 Console.ReadKey();
 
@@ -13,10 +16,11 @@ async Task Handle(int req)
 
 async IAsyncEnumerable<int> Subscribe()
 {
+    Console.WriteLine("Subscribe");
     var random = new Random();
-    while (true)
+    for (int i = 0; i < 1_000_000; i++)
     {
-        await Task.Delay(100);
-        yield return random.Next(1, 100);
+        // await Task.Delay(100);
+        yield return i;
     }
 }
