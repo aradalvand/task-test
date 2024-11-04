@@ -1,18 +1,22 @@
-﻿_ = Task.Run(async () =>
+﻿await foreach (var req in Subscribe())
 {
-    while (true)
-    {
-        Thread.Sleep(1000);
-        Console.WriteLine("1 second passed in task");
-    }
-});
-
-
-while (true)
-{
-    Thread.Sleep(1000);
-    Console.WriteLine("1 second passed here");
+    await Handle(req);
 }
 
-Console.WriteLine("Yep");
-Console.ReadLine();
+Console.ReadKey();
+
+async Task Handle(int req)
+{
+    await Task.Delay(1000);
+    Console.WriteLine($"{req} handled.");
+}
+
+async IAsyncEnumerable<int> Subscribe()
+{
+    var random = new Random();
+    while (true)
+    {
+        await Task.Delay(100);
+        yield return random.Next(1, 100);
+    }
+}
