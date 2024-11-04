@@ -1,10 +1,10 @@
 ﻿Console.WriteLine("Here");
 var r = Subscribe();
 Console.WriteLine("Here now");
-await Parallel.ForEachAsync(r, async (req, ct) =>
+await foreach (var req in r)
 {
-    await Handle(req);
-});
+    _ = Handle(req);
+}
 
 Console.ReadKey();
 
