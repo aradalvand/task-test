@@ -1,10 +1,14 @@
 ﻿Console.WriteLine("Here");
 var r = Subscribe();
 Console.WriteLine("Here now");
-await foreach (var req in r)
+await Parallel.ForEachAsync(r, parallelOptions: new()
 {
-    _ = Handle(req);
-}
+    MaxDegreeOfParallelism = int.MaxValue
+}, async (req, ct) =>
+{
+    await Handle(req);
+});
+
 
 Console.ReadKey();
 
